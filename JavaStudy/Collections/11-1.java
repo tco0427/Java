@@ -79,12 +79,12 @@ public class Study{
                 input();
             else if(menu==2)
                 quiz();
-            else if(menu==3)
+            else if(menu==3){
                 finish();
-            else {
-                error();
                 break;
             }
+            else
+                error();
         }
     }
     private boolean contain(String buf){
