@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-public class JavaStudy {
+public class Q_13 {
     Scanner sc=new Scanner(System.in);
     Vector<String> vec=new Vector<>();
     HashMap<String,Integer> memory=new HashMap<>();
