@@ -2,7 +2,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Set;
 
-public class JavaStudy {
+public class Q_12 {
     HashMap<String,String> map=new HashMap<>();
     Scanner sc=new Scanner(System.in);
 
