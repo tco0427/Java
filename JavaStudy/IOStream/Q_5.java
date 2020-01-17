@@ -7,7 +7,7 @@ import java.io.BufferedReader;
 import java.io.*;
 
 
-public class Q5 {
+public class Q_5 {
     public static void main(String[] args){
         Scanner sc=new Scanner(System.in);
 
