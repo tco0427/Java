@@ -21,7 +21,7 @@ class MyStack<T> implements IStack<T> {
     }
 }
 
-public class Study{
+public class Q_9{
     public static void main(String[] args) {
         IStack<Integer> stack=new MyStack<Integer>();
         for(int i=0;i<10;i++)
