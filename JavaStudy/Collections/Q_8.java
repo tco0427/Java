@@ -3,7 +3,7 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.Iterator;
 
-public class javastudy {
+public class Q_8 {
     HashMap<String,Integer> map=new HashMap<>();
     Scanner sc=new Scanner(System.in);
     String name;
