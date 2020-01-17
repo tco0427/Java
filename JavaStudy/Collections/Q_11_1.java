@@ -22,7 +22,7 @@ class Nation{
 
 
 
-public class Study{
+public class Q_11_1{
     Scanner sc=new Scanner(System.in);
     Vector<Nation> vct=new  Vector<>();
 
