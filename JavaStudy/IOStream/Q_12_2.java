@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.Scanner;
 import java.util.ArrayList;
 
-public class Q_12 {
+public class Q_12_2 {
     Scanner sc=new Scanner(System.in);
     ArrayList<String> list=new ArrayList<>();
 
@@ -17,12 +17,16 @@ public class Q_12 {
     public boolean readfile(String filename){
         int i=0;
         try{
-            Scanner fScanner = new Scanner(new FileReader(filename));
-            while(fScanner.hasNext()) { // 파일을 라인 단위로 모두 읽기
+            BufferedReader br=new BufferedReader(new FileReader(filename));
+            while(true) {
                 StringBuilder lineb=new StringBuilder();
+
                 lineb.append(i);
                 lineb.append(": ");
-                lineb.append(fScanner.nextLine());
+                String str=br.readLine();
+                if(str==null)
+                    break;
+                lineb.append(str);
                 String line=lineb.toString();
                 list.add(line); // 한 라인을 벡터에 저장
                 i++;
@@ -67,7 +71,7 @@ public class Q_12 {
             System.out.println("프로그램을 종료합니다.");
     }
     public static void main(String[] args) {
-        Q_12 q=new Q_12();
+        Q_12_2 q=new Q_12_2();
         q.run();
     }
 }
