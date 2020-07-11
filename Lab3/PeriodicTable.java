@@ -1,11 +1,18 @@
 /*
-Lab5
-2020/05/01
-32180472 김동규
+Lab6
+과목명(분반): 자바프로그래밍1(2분반)
+교수명: 박경신 교수님
+학번: 32180472
+학과: 컴퓨터공학과
+이름: 김동규
+제출일: 2020/05/18
  */
 
-//import문을 통하여 java.util패키지의 Arrays,ArrayList클래스와 List인터페이를 import한다.
+//import문을 통하여 java.util패키지의 Arrays,ArrayList클래스와 List인터페이스를 import한다.
 //import문은 다른 패키지의 클래스를 사용할 때, 컴파일러에게 그 클래스의 경로명을 알려준다.
+//import문은 다른 패키지의 클래스를 사용할 때, 컴파일러에게 그 클래스의 경로명을 알려줌을 통해
+//이를 통해클래스 사용시 패키지선언을 생략하고 사용할 수 있다.
+//(서로 다른 패키지의 동일한 이름의 클래스를 대상으로 동시에 import하는 것은 불가능하며, 디폴트패키지를 import할수도 없다.(컴파일 에러) 왜냐하면 default package는 어나니머스, 즉 이름이 없는 패키지이기 때문이다.)
 //toString()에서 Arrays.toString()을 통해 배열의 내용을 한 줄의 문자열로 반환한다.
 //ArrayList(컬렉션 인스턴스)를 통해 find(State state)에서 해당되는 state에 해당되는 PeriodicElement인스턴스를
 //길이를 신경쓰지 않고 추가하고 이를 배열로 변환하는데 사용
@@ -28,7 +35,7 @@ public class PeriodicTable {
     //생성자
     //생성자를 통해 배열을 전달받고 이를 elements가 참조할 경우
     //elements는 배열인스턴스(elements[0]...elements[n])을 참조하고
-    //각각의 elements[0]...elements[n]들이 실제 인스턴스를 참조하고 있는 것으로 볼 수 있다.(PeriodicElement참조변수로 참조가능한 인스턴스)
+    //각각의 elements[0]...elements[n]들이 실제 인스턴스를 참조하고 있는 것으로 볼 수 있다.(PeriodicElement참조변수로 참조가능한 인스턴스, PeriodicElement를 상속을 통해 구현한 클래스의 인스턴스)
     //객체에 대한 배열은 "객체에 대한 참조(래퍼런스)를 원소로 갖는 배열"로 볼 수 있다.
     public PeriodicTable(PeriodicElement[] elements) {
         this.elements = elements;
@@ -201,16 +208,26 @@ public class PeriodicTable {
         //다운 캐스팅은 프로그래머가 이를(list.toArray()가 반환하는 인스턴스가 PeridoicElement[]형이다!)보장한다는 의미로 컴파일러가 허용한다.
         //하지만 실제로 list.toArray()가 반환하는 것은 Object[]형이므로 이와 같은 형변환은 불가능하다.
         //하위클래스 형식의 참조변수로 상위클래스의 인스턴스를 참조하는 방식은 옳지 않다.(하지만 반대로 상위클래스 형식의 참조변수로 하위클래스의 인스턴스를 참조하는 것은 가능하다.)
+
+        //따라서 다음과 같이 컬렉션 인스턴스의 크기만큼의 배열을 먼저 생성한 이후에
         PeriodicElement[] peArray=new PeriodicElement[list.size()];
+        //이 배열에 대한 래퍼런스를 가지는 래퍼런스 변수를 toArray의 인자로 전달하여준다.
+        //System.arraycopy에 의해 컬렉션인스턴스인 ArrayList의 내용이 peArray배열로 복사된다.
+        /*
+        public <T> T[] toArray(T[] a) {
+            if (a.length < size)
+                // Make a new array of a's runtime type, but my contents:
+                return (T[]) Arrays.copyOf(elementData, size, a.getClass());
+            System.arraycopy(elementData, 0, a, 0, size);
+            if (a.length > size)
+                a[size] = null;
+            return a;
+        }
+         */
         list.toArray(peArray);
-
-
         //이렇게 변환된 PeriodicElement형 배열을 반환한다.
         return peArray;
     }
-
-
-
 
     //PeriodicTable클래스의 필드 elements(private static)가 참조하는 배열인스턴스에 해당하는 원소들을 전부 테이블형태로 출력하는 메소드
     public void print(){
@@ -232,5 +249,43 @@ public class PeriodicTable {
         }catch(ArrayIndexOutOfBoundsException e){
             System.out.println("잘못된 인덱스 접근으로 인해 화학원소의 변경은 이루어지지 않습니다.");
         }
+    }
+    //인자로 전달된 PeriodicElementFinder참조변수로 참조가능한 인스턴스에 대해서 find메소드를 호출한다.
+    //(PeriodicElementFinder는 추상클래스이므로 이를 대상으로 인스턴스생성은 불가능할 것이다. 따라서 이를 구현한 구상클래스의 인스턴스가 전달될 것이고 당연히 PeriodicElementFinder로 참조가능하다.)
+    //이 때 find()메소드의 인자로 인스턴스변수 elements가 참조하는 인스턴스가 전달될 것이고, find가 반환하는 PeriodicElement[]객체를 반환한다.
+    //(매개변수로 전달되는 인스턴스에 따라서 finder.find()의 내부적인 구현에서 사용되는 isInstanceOf()의 동작에 차이가 있고, 다형성을 실현하였다고 볼 수 있다.)
+    //(실제로 find를 호출하는 객체에 따라서 isInstanceOf()가 달라지는 것인데 이를 내부적으로 사용하고 있는 find()가 달라지는 것처럼 보일 수 있다.)
+    public PeriodicElement[] find(PeriodicElementFinder finder){
+        return finder.find(elements);
+    }
+    //find(State), find(PeriodicElementFinder), find(IPeriodicElementFinder)이 세개의 메소드는 매개변수정보(매개변수 개수, 타입, 선언 순서 등)에 대해서만
+    //차이가 있고, 메소드 이름과 반환형이 동일한 오버로딩 관계이다.
+    //메소드 호출 시 IPeriodicElementFinder를 구현한 concrete class를 인자로 받고 이를 ifinder라는 매개변수로 참조하게된다.
+    //(IPeriodicElementFinder인터페이스를 통한 인스턴스 생성은 불가능하므로 당연히 이를 구현한 구상클래스의 인스턴스가 전달될 것이다.)
+    //매개변수가 IPeriodicElementFinder로 선언되어 있으므 이를 구현하는 클래스의 인스턴스는 모두 전달될 수 있다(추상화타입을 통해 다형성 실현)
+    public PeriodicElement[] find(IPeriodicElementFinder ifinder){
+        //PeriodicElement 인스턴스를 저장하는 ArrayList<PeriodicElement>컬렉션 인스턴스를 생성하고 이를 list라는 이름으로 참조한다.
+        //다이아몬드 기호를 통한 타입 인자 생략(컴파일러가 참조변수 선언을 통해서 유추가 가능하다. 비공식적인 표현이긴 하지만 공식적인 표현으로 인식될만큼 널리 사용되는 방법)
+        List<PeriodicElement> list=new ArrayList<>();
+        //for-each문을 통해 인스턴스변수 elements가 참조하는 배열인스턴스에 대해서 전체 반복
+        for(PeriodicElement e: elements){
+            //매개변수를 통해 전달받은 IPeriodicElementFinder의 구상객체에 대해서 isInstaceOf를 호출하고 인자로 e(반복을 하면서 순차적으로 접근하게 되는 배열의 원소)가 전달된다.
+            if(ifinder.isInstanceOf(e)){
+                //만약 ifinder.isInstanceOf()가 반환하는 값이 참이면
+                //add메소드의 인자를 통해 저장할 인스턴스를 전달한다.(e가 참조하는 인스턴스 전달)
+                //실제로 add의 인자로 전달된 인스턴스는 실제 저장되는 것이 아닌 인스턴스의 참조값이 저장된다.
+                list.add(e);
+            }
+        }
+        //반복을 끝낸 이후 컬렉션 인스턴스를 배열형태로 변환해주기 위해 다음과 같은 작업을 수행한다.
+        //우선 ArrayList의 크기만큼의 배열을 생성한다.
+        PeriodicElement[] peArray=new PeriodicElement[list.size()];
+        //그리고 toArray메소드의 인자로 배열인스턴스에 대한 참조변수를 전달한다.
+        //peArray가 참조하는 배열인스턴스의 길이와 컬렉션인스턴스의 길이가 같으므로
+        //System클래스의 arrayCopy()를 통해 컬렉션의 내용이 peArray가 참조하는 배열인스턴스로 복사된다.
+        list.toArray(peArray);
+
+        //이렇게 변환된 PeriodicElement형 배열을 반환한다.
+        return peArray;
     }
 }

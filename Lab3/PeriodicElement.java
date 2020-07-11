@@ -1,7 +1,11 @@
 /*
-Lab5
-2020/05/01
-32180472 김동규
+Lab6
+과목명(분반): 자바프로그래밍1(2분반)
+교수명: 박경신 교수님
+학번: 32180472
+학과: 컴퓨터공학과
+이름: 김동규
+제출일: 2020/05/18
  */
 
 //PeriodicElement클래스에서 사용할 (java.util패키지에 들어있는)StringTokenizer클래스를 import시켰다.
@@ -10,6 +14,10 @@ import java.util.StringTokenizer;
 
 //public으로 선언되었으므로 외부패키지에서도 접근이 가능하다.(모든 영역에서 접근이 가능하다)
 //public으로 선언된 클래스의 이름은 소스파일(.java)의 이름과 동일해야한다.
+//abstract키워드를 통해 PeriodicElement를 추상클래스로 선언하였고
+//abstract키워드와 함께 메소드의 선언부만을 작성한 print()추상메소드를 가진다.
+//추상클래스인 PeriodicElement를 대상으로 한 인스턴스의 생성이 불가능하다.(물론 PeriodicElement형 참조변수는 선언 가능하다.)
+//이를 상속하여 오버라이딩을 통해 추상메소드를 모두 구현한 구상클래스(concrete class)를 대상으로만 인스턴스 생성이 가능하다.
 public abstract class PeriodicElement {
     /*
     객체 지향 특성을 살리기 위해서는 캡슐화 원칙을 지키는 것이 좋고 이를 위해 가능하면 필드에 대해서 접근 범위를 작게하는 것이 좋다.

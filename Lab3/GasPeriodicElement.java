@@ -1,7 +1,11 @@
 /*
-Lab5
-2020/05/01
-32180472 김동규
+Lab6
+과목명(분반): 자바프로그래밍1(2분반)
+교수명: 박경신 교수님
+학번: 32180472
+학과: 컴퓨터공학과
+이름: 김동규
+제출일: 2020/05/18
  */
 
 //PeriodicElement를 상속하고 추상메소드 print()를 오버라이딩을 통해 구현한 구상클래스(Concrete Class)
@@ -32,6 +36,5 @@ public class GasPeriodicElement extends PeriodicElement {
         System.out.println("name="+this.name);
         System.out.println("weight="+this.weight);
         System.out.println("state="+this.state);
-        System.out.println();
     }
 }
