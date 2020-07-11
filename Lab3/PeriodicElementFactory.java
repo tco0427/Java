@@ -1,11 +1,11 @@
 /*
-Lab6
+Lab7
 과목명(분반): 자바프로그래밍1(2분반)
 교수명: 박경신 교수님
 학번: 32180472
 학과: 컴퓨터공학과
 이름: 김동규
-제출일: 2020/05/18
+제출일: 2020/05/26
  */
 
 //상태(State)에 맞는 PeriodicElement를 생성하여 반환하여주는 클래스
@@ -23,6 +23,7 @@ public class PeriodicElementFactory {
     //반환형이 PeriodicElement이기 때문에 이를 상속하는 클래스는 모두 반환가능하다.(상속을 통한 다형성을 실현했다고 볼 수 있다.)
     public static PeriodicElement getInstance(int number, String symbol, String name,double weight,State state){
         PeriodicElement element=null;
+        //다중 if-else문을 이용하여 인자를 통해 전달받은 state에 따라서 해당되는 인스턴스를 element가 참조하도록한다.
         if(state==State.GAS){
             element=new GasPeriodicElement(number,symbol,name,weight);
         }else if(state==State.SOLID){

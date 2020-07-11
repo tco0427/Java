@@ -1,17 +1,17 @@
 /*
-Lab6
+Lab7
 과목명(분반): 자바프로그래밍1(2분반)
 교수명: 박경신 교수님
 학번: 32180472
 학과: 컴퓨터공학과
 이름: 김동규
-제출일: 2020/05/18
+제출일: 2020/05/26
  */
 
 //import문을 통하여 java.util패키지의 Arrays,ArrayList클래스와 List인터페이스를 import한다.
 //import문은 다른 패키지의 클래스를 사용할 때, 컴파일러에게 그 클래스의 경로명을 알려준다.
 //import문은 다른 패키지의 클래스를 사용할 때, 컴파일러에게 그 클래스의 경로명을 알려줌을 통해
-//이를 통해클래스 사용시 패키지선언을 생략하고 사용할 수 있다.
+//클래스 사용시 패키지선언을 생략하고 사용할 수 있다.
 //(서로 다른 패키지의 동일한 이름의 클래스를 대상으로 동시에 import하는 것은 불가능하며, 디폴트패키지를 import할수도 없다.(컴파일 에러) 왜냐하면 default package는 어나니머스, 즉 이름이 없는 패키지이기 때문이다.)
 //toString()에서 Arrays.toString()을 통해 배열의 내용을 한 줄의 문자열로 반환한다.
 //ArrayList(컬렉션 인스턴스)를 통해 find(State state)에서 해당되는 state에 해당되는 PeriodicElement인스턴스를
@@ -19,12 +19,14 @@ Lab6
 import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.Collections;
 
 //PeriodicElement는 화학원소 데이터 하나하나를 담고 있는 클래스라고 한다면
 //PeriodicTable은 PeriodicElement를 배열(array)형태로 여러개의 화학원소 정보를 가지고 있으면서 이를 관리하는 클래스
 //public으로 선언되었으므로 외부패키지에서도 접근이 가능하다.(모든 영역에서 접근이 가능하다)
 //public으로 선언된 클래스의 이름은 소스파일(.java)의 이름과 동일해야한다.
-public class PeriodicTable {
+public class  PeriodicTable {
     //PeriodicElement배열을 참조하는 참조변수 elements
     /*
     객체 지향 특성을 살리기 위해서는 캡슐화 원칙을 지키는 것이 좋고 이를 위해 가능하면 필드에 대해서
@@ -229,7 +231,7 @@ public class PeriodicTable {
         return peArray;
     }
 
-    //PeriodicTable클래스의 필드 elements(private static)가 참조하는 배열인스턴스에 해당하는 원소들을 전부 테이블형태로 출력하는 메소드
+    //PeriodicTable클래스의 필드 elements(private)가 참조하는 배열인스턴스에 해당하는 원소들을 전부 테이블형태로 출력하는 메소드
     public void print(){
         for(PeriodicElement pe: elements){
             System.out.println("----------------------------------------------------------------------------------------");
@@ -287,5 +289,153 @@ public class PeriodicTable {
 
         //이렇게 변환된 PeriodicElement형 배열을 반환한다.
         return peArray;
+    }
+
+
+    //Lab7추가내용//
+    //매개변수로 전달되는 min값에서부터 max값까지의 인덱스에 해당하는 원소들을 배열형태로 반환해주는 메소드
+    public PeriodicElement[] getElements(int min,int max){
+        //max와 min의 차를 size에 저장한다.
+        int size=max-min;
+        //만약 size가 0보다 작으면 즉, min이 max보다 크면 null을 반환한다.
+        if(size<0){
+            return null;
+        }
+        //max와 min의 차이보다 1큰 크기의 PeriodicElement배열을 생성하며
+        //이에 대한 참조값을 가지는 PeriodicElement[]형 참조변수를 periodicElements라는 이름으로 선언한다.(배열의 선언 및 생성 동시에)
+        PeriodicElement[] periodicElements=new PeriodicElement[size+1];
+        //try-catch구문을 통해 예외를 처리하도록 하였다.
+        try {
+            //만약 min과 max가 같고 size가 0이면
+            if(min==max&&size==0){
+                //periodicElement는 size보다 1큰 크기로 만들었으므로 원소를 하나 가지는 배열이 만들어졌을 것이고
+                //min과 max가 같으므로 어떤 것을 써도 상관없고, elements가 참조하는 객체배열의 min인덱스의 객체를 periodicElement의 0번인덱스에 저장한다.
+                //(periodicElements배열은 객체에 대한 래퍼런스를 원소로 가지는 배열이다. 즉, PeriodicElement형 참조변수의 배열로 볼 수 있다.
+                //periodicElement의 0번째 인덱스의 참조변수가 elements의 min번 인덱스에 해당하는 참조변수가 참조하는 객체와 같은 객체를 참조한다.)
+                periodicElements[0]=elements[min];
+                //periodicElements가 참조하는 배열을 반환하면서 메소드를 종료한다.
+                return periodicElements;
+            }
+            //변수 i의 값이 반복문을 진입하면서 0으로 초기화되고, 0~size까지 1씩증가하며 반복하는 for문이다.
+            //(위의 if문들을 통과하였기 때문에 size는 0보다 크다는 것을 알 수 있다.)
+            for (int i = 0; i < size + 1; i++) {
+                //반복을 진행하면서 i은 for문의 증감식을 통해, min값은 다음의 min++후위 증감 연산자를 통해 함께 1씩증가한다.
+                //그리고 periodicElement의 i번째 인덱스의 래퍼런스와 elements의 min번째 인덱스의 래퍼런스는 동일한 래퍼런스로 같은 인스턴스를 참조하게 된다.
+                periodicElements[i] = elements[min];
+                //min을 1증가시키는 후위 증감 연산자, 연산이 반형되는 시점은 연산이 진행된 문장이 아닌 그 다음 문장으로 넘어가야 반영된다.
+                min++;
+            }
+        //min,max값의 전달이 정상적이지 않을 수 있다. 예를들어 -4,-2가 전달된다고 가정하면
+        //elements[min]에서 정상적이지 않은 접근이 일어나고 ArrayIndexOutOfBoundsException이 발생할 수 있다.
+        //따라서 이에대해 try-catch문을 통해 예외를 처리하여 프로그램의 실행흐름을 이어나가도록하였다.
+        }catch(ArrayIndexOutOfBoundsException e){
+            //사용자에게 잘못된 인덱스 접근이 있음을 알린다.
+            System.out.println("Invalid index access");
+            //periodicElements가 null을 참조하도록한다.
+            periodicElements=null;
+        }
+        //periodicElements가 참조하는 인스턴스 혹은 null을 반환하고 메소드를 종료한다.
+        return periodicElements;
+    }
+
+    //인자를 통해 전달받은 size를 통해서 new PeriodicElement[size]와 같이 배열을 생성할 때 음수가 전달되면 NegativeArraySizeException이 발생하게 된다.
+    //이제까지는 메소드 내부에서 예외가 발생하였을 때 try-catch문을 통해서 처리하도록 하였다.
+    //하지만 다음의 4개의 메소드들에 대해서는 메소드 내부에서 예외를 처리하는 것이 아니라 메소드에서는 발생가능한 예외를 throws를 통해 넘겨주고
+    //메소드를 사용하는 곳에서 메소드를 사용함에 따라 발생가능한 예외를 사용하는 곳마다 적절히 처리할 수 있도록 하였다.
+    //(참고로 프로그램의 startin point인 main메소드도 예외를 넘기면 이 예외는 main을 호출한 가상머신으로 넘어가고 프로그램은 종료된다.)
+    //(예외처리에 대해서 생각을 조금 해보니(물론 크게 의미가 있는지는 모르겠지만) 메소드내부에서 예외까지 처리하는 것보다는
+    //메소드는 단순히 자기가 맡은 '기능'만을 수행하고 발생가능한 예외를 throws를 통해 메소드를 호출한 영역으로 넘겨주어
+    //이 메소드를 활용하는 곳에서 적절히 처리하는 것이 더 깔끔한 것 같다는 생각을 하엿다.
+    //물론 메소드 내부에서 예외를 처리하는 것이 깔끔한 경우도 존재할 것이지만..따라서 둘 다 적절히 사용할 줄 알아야 할 것 같다.)
+    public PeriodicElement[] getRandomElements(int size) throws NegativeArraySizeException{
+        //int형 변수 random을 선언한다. 이 때 초기화를 하지 않았다.
+        int random;
+        //매개변수를 통해 전달받은 size크기만금의 배열을 생성하며 periodicElements라는 이름의 PeriodicElement[]형 참조변수를 선언한다.(배열의 선언 및 생성 동시에)
+        //이 때 size가 음수이면 NegativeArraySizeException이 발생할 것이고 throws를 통해 메소드를 호출한 영역으로 넘기면서 메소드의 호출이 종료된다.
+        //따라서 이를 호출한 영역에서 예외를 처리하거나 프로그램이 종료된다.
+        //(Error를 상속하거나 RuntimeException을 상속하는 예외의 발생은 특별히 무언가를 하지 않아도 되지만 Exception을 상속하는 예외의 발생에 대해서는 try-catch로 처리하거나 throws로 예외의 처리를 넘긴다는 표시를 꼭 해야 한다. 컴파일러 체)
+        PeriodicElement[] periodicElements=new PeriodicElement[size];
+        //변수 i의 값이 반복문을 진입하면서 0으로 초기화되고, 0~size-1까지 1씩증가하며 반복하는 for문이다.
+        for(int i=0;i<size;i++) {
+            //Math클래스의 static메소드인 random메소드를 호출한다.(Math클래스는 java.lang패키지에 속하므로 별도로 import할 필요가 없다.)
+            //Math의 random은 현재시간을 씨드(seed)로 사용하며 0이상 1미만의 double형 값(실수)의 난수를 균일한 분포로 반환한다.
+            //우리에게 필요한 값은 elements의 인덱스번호인 0부터49까지의 값이므로 elements.length를 통해 배열의 길이인 50을 곱하면
+            //0이상 50미만의 값을 얻게 된다. 이 때 이 값은 double형이므로 (int)을 통해 정수로 형변환을 한다. 그러면 이 때 소수점 이하는 버려지게 되고
+            //정수 0부터 49까지의 값을 랜덤하게 생성하여 int형 변수 random에 저장하게 된다.
+            random =(int)(Math.random()*elements.length);
+            //periodicElements와 elements모두 객체에 대한 래퍼런스를 원소로 하는 배열인데,
+            //periodicElements의 i번째 인덱스에 elements의 random번째 인덱스가 참조하는 인스턴스의 참조값(래퍼런스값)을 대입한다.
+            //즉 periodicElements[i]에 저장된 객체에 대한 래퍼런스와 elements[random]에 저장된 객체에 대한 래퍼런스는 동일한 값으로 둘은 동일한 인스턴스를 참조한다.
+            periodicElements[i]=elements[random];
+        }
+        //return문을 통해 periodicElements가 참조하는 배열인스턴스를 반환하며 메소드의 호출을 종료한다.
+        return periodicElements;
+    }
+    //PeriodicTable의 인스턴스변수 elemetns가 참조하는 배열에서 랜덤하게 하나를 골라서 반환하는 메소드
+    public PeriodicElement getRandomElement() throws ArrayIndexOutOfBoundsException {
+        //Java에서 난수를 발생시키는 방법은 java.lang.Math클래스의 정적메소드인 random()메소드를 사용하는 방법과 java.util.Random 클래스를 사용하는 방법 두가지가 존재한다.
+        //위의 getRandomElements에서는 Math의 random()메소드를 활용하였기에 여기서는 Random클래스를 사용하도록하겠다.
+        //다음의 문장은 Random클래스의 인스턴스를 생성하며 random이라는 이름의 참조변수로 참조한다.
+        //Random인스턴스 생성시 시드값을 생성자로 전달하지 않으면 현재시간을 시드값으로하고 이 시드값을 인자로 받는 다른 생성자를 호출한다.
+        //public Random(){
+        //    this(System.currentTimeMillis());
+        //}
+        Random random=new Random();
+        //Random클래스에는 nextBoolean(),nextLong(),nextFloat()등의 메소드가 정의되어 있다.
+        //nextInt()도 정의되어 있는데 nextInt()와 nextInt(int bound)로 오버로딩되어 있다.
+        //nextInt()의 경우에는 int형 난수를 반환하고 nextInt(int bound)의 경우에는 0이사 bound미만 번위의 int형 난수를 반환한다.
+        //random.nextInt()메소드의 인자로 elements.length 즉 배열의 길이가 전달되고 있다.
+        //여기서 elements가 참조하는 배열의 길이가 50이라면 rnadom.nextInt(elements.length)는 0이상 50미만의 값을 반환할 것이다.(0~49)
+        //즉 배열의 모든 인덱스번호에 대해서 랜덤하게 하나를 고르게 된다.
+        //이를 통해 elements가 참조하는 배열의 모든요소에 대해서 랜덤하게 하나를 고르고 이를 return을 통해 반환하면서 메소드호출이 종료된다.
+        return elements[random.nextInt(elements.length)];
+    }
+    //elements가 참조하는 배열의 순서를 랜덤하게 섞는 메소드
+    public void shuffle() throws UnsupportedOperationException{
+        //if the specified list or its list-iterator does not support the set operation.
+        //위와 같은 경우 Collections.shuffle()메소드는 UnsupportedOperationException을 일으킨다고 자바API문서에 나와있다.
+        //따라서 이를 사용하는 PeriodicTable의 shuffle()메소드에서는 이를 throws를 통해 이 메소드를 호출한 영역으로 넘기도록 하였다.
+        //그리고 이에 대해 적절히 예외처리를 할 수 있도록 하였다.
+
+        //Collections클래스의 shuffle메소드를 통해 elements가 참조하는 배열의 순서를 랜덤하게섞도록 하겠다.
+        //Collections클래스에 정의된 shuffle메소드는 다음과 같다.
+        /*
+        public static void shuffle(List<?> list) {
+            Random rnd = r;
+            if (rnd == null)
+                r = rnd = new Random(); // harmless race.
+            shuffle(list, rnd);
+        }
+         */
+        //즉 매개변수형이 List<?>형이다. 여기서 와일드카드(?)가 쓰였는데 위의 메소드는 다음과 의미가 동일하다.
+        //(public static <T> void shuffle(List<T> list))
+        //매개변수형이 List<?>이므로 Arrays.asList()메소드를 통해서 배열을 리스트의 형태로 변환하여 주어야한다.
+        //asList메소드는 다음과 같다.
+        /*
+        public static <T> List<T> asList(T... a) {
+            return new ArrayList<>(a);
+        }
+         */
+        //이 때 생성되는 ArrayList는 java.util.Arrays.ArrayList이다. 우리가 컬렉션을 배울 때 알고 있던 java.util.ArrayList와는 다르다.
+        //하지만 이 클래스 또한 Collections과 List를 상속한다.
+        //Arrays.asList로 생성한 객체는 이미 존재하는 fixed sized 배열의 주소값을 가져와 List로 처리하기 때문에 새로운 인스턴스의 추가나 삭제가 불가능하다.
+        //그리고 기존 배열의 주소값을 가져오기 때문에 asList로 생성한 ArrayList의 내용이 변경되면 기존 배열(asList의 인자로 전달된 배열)의 내용도 변경된다.
+        //java.util.Arrays.ArrayList는 set,get메소드는 가지고 있지만 add()메소드는 가지고 있지 않다.
+        //하지만 List형 참조변수로 참조하고 있다면 add()호출은 가능하겠지만 List형 참조변수가 참조하는 객체(ArrayList)는 add()메소드는 지원하지 않으므로 UnsupportedOperationException실행예외가 발생할 것이다.
+        //즉 정리하여 보면 다음의 문장에서 Collections클래스의 shuffle메소드를 통해 우리는 배열의 내용을 랜덤하게 썪는데,
+        //elements가 참조하는 배열을 Collections클래스의 shuffle메소드의 인자로 전달하여 랜덤하게 섞기위해 Arrays.asList를 통해 리스트형태로 변환하여 전달하고있다.
+        Collections.shuffle(Arrays.asList(elements));
+    }
+    //배열을 정렬하기 위한 메소드
+    public void sort() throws ClassCastException{
+        //Arrays클래스의 sort메소드의 인자로 배열(elements가 참조하는 배열인스턴스)을 전달하여 배열을 정렬한다.
+        //이 Arrays.sort()는 기본자료형에 대해서 오버로딩되어 있을 뿐만 아니라 Object배열에 대해서도 오버로딩되어 있다.
+        //이는 인스턴스의 참조값을 저장하고 있는 배열에 대한 정렬을 진행하는데 이 때 인스턴스들은 Comparable인터페이스를 구현하여
+        //compareTo메소드를 통해 정렬의 기준을 제시하여야한다.
+        //만약 Object[](혹은 이 하위의 클래스들의 배열(모든 클래스는 Object를 상속))배열의 래퍼런스에 해당하는 인스턴스들이 Comparable을 구현하지 않았다면
+        //ClassCastException예외를 발생시킨다. 따라서 Arrays.sort()를 사용하는 PeriodicTable의 sort()메소드에서는 throws를 통해 이 메소드를 사용하는 영역으로 예외를 넘긴다.
+        //elements가 참조하는 PeriodicElement배열에 대해서 PeriodicElement클래스는 Comparable을 implements하고 있다.
+        //따라서 PeriodicElement에 정의된 compareTo의 정렬기준에 따라서 정렬될 것이다.
+        Arrays.sort(elements);
     }
 }

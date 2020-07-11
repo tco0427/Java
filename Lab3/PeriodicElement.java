@@ -1,11 +1,11 @@
 /*
-Lab6
+Lab7
 과목명(분반): 자바프로그래밍1(2분반)
 교수명: 박경신 교수님
 학번: 32180472
 학과: 컴퓨터공학과
 이름: 김동규
-제출일: 2020/05/18
+제출일: 2020/05/26
  */
 
 //PeriodicElement클래스에서 사용할 (java.util패키지에 들어있는)StringTokenizer클래스를 import시켰다.
@@ -18,7 +18,14 @@ import java.util.StringTokenizer;
 //abstract키워드와 함께 메소드의 선언부만을 작성한 print()추상메소드를 가진다.
 //추상클래스인 PeriodicElement를 대상으로 한 인스턴스의 생성이 불가능하다.(물론 PeriodicElement형 참조변수는 선언 가능하다.)
 //이를 상속하여 오버라이딩을 통해 추상메소드를 모두 구현한 구상클래스(concrete class)를 대상으로만 인스턴스 생성이 가능하다.
-public abstract class PeriodicElement {
+//PeriodicElement는 Comparable<T>인터페이스를 구현한다.(기존의 Comparable인터페이스에서, 자바에 제네릭(generic)이 도입되면서 Comparable<T>인터페이스로 수정되었다.)
+//Comparable<T>인터페이스를 구현할 때 정의해야 할 추상메소드는 int compareTo(T o)이다.
+//따라서 PeriodicElement추상클래스에서는 int compareTo(T o)의 구현부를 제공한다.
+//(물론 PeriodicElement는 추상클래스이므로 이를 구현하지 않고, public abstract int compareTo(PeriodicElement other); 다음과 같이 할 수 있다.
+//하지만 이는 PeriodicElement의 구상클래스들에서 모두 공통되므로 PeriodicElement에서 구현하도록 하였다.
+//Comparable<T>의 타입매개변수T를 PeriodicElement로 하였다.
+//이러한 제네릭으로 인해 불필요한 타입변환(cast)와 자료형과 관련된 프로그래머의 실수가 컴파일과정에서 드러나도록 하는 이점을 얻을 수 있었다. 또 ClassCastException을 방지할 수 있다.
+public abstract class PeriodicElement implements Comparable<PeriodicElement>{
     /*
     객체 지향 특성을 살리기 위해서는 캡슐화 원칙을 지키는 것이 좋고 이를 위해 가능하면 필드에 대해서 접근 범위를 작게하는 것이 좋다.
     PeriodicElement는 추상클래스이므로 이를 상속하는 구상클래스에서 이 필드에 접근 가능해야하므로 protected로 선언해주었다.
@@ -252,5 +259,89 @@ public abstract class PeriodicElement {
         //실행흐름이 catch문으로 흘러가게 되었을 경우에는 처음의 element=null이므로 null이 반환되고
         //정상적인 입력일 경우에만 PeriodicElementFactory.getInstance()를 통해 생성된 인스턴스가 반환된다.
         return element;
+    }
+
+/*
+    //와일드카드(?)는 어떤 타입도 가능하므로 ? 단독으로는 Object와 다를것이 없다.
+    //보통 와일드카드는 제네릭 클래스의 객체를 메소드의 매개변수로 받을 때, 그 객체의 타입 변수를 제한할 때 사용한다.
+    //(<? super T>: 하한제한된 와일드 카드 <? extends T>: 상한 제한된 와일드 카드)
+    //(참고로 public <T> void method(A<T> a)와 public void method(A<?> a)는 동일하다.
+    //(각각 제네릭 메소드의 정의와 와일드카드 기반 메소드의 정의이다.)
+    //제네릭 메소드 선언 시 <T>는 반환형 앞에서 T가 타입 매개변수의 선언임을 알리기위해 한 번 한 번, 매개변수에서 한 번 총 두 번 등장하고
+    //와일드카드를 이용한 예에서는 <?>가 한 번 등장한다.)
+ */
+
+    //Comparable<T>인터페이스의 추상메소드 compareTo를 오버라이딩을 통해 정의한다.
+    //Arrays.sort() 혹은 Collections클래스의 sort()메소드를 통해 정렬하고자 할 때 정렬의 기준이 필요하고
+    //다음의 compareTo()메소드를 오버라이딩하여야한다.
+    //(따라서 PeriodicElement를 상속하는 하위의 구상클래스들은 PeriodicElement에서 오버라이딩을 통해 정의한 compareTo를 따르게 된다. 하
+    //물론 하위클래스에서 compareTo()메소드를 다시 오버라이딩한다면 그 하위클래스에 대한 정렬의 기준은 바뀔 것이다.)
+    //물론 Collections의 sort메소드는 매개변수가 각각
+    //(List<T> list)와 (List<T> list,Comparator<? super T> c)와 같이 오버로딩되어 있어
+    //정렬하려는 객체의 클래스 T가 Comparable을 구현하지 않더라도 Comparator인스턴스를 전달하여 주면 정렬가능하다.
+    //(이 때 Comparator<? super T>는 와일드카드를 통한 하한제한으로 T의 상위의 클래스에 대하여 Comparator가 정의되어 있으면
+    //하위클래스에서 이를 또 정의해줄 필요가 없다. 또한 T형 인스턴스를 넣는(set) 작업(전달하는 작업)만 가능하고(compare메소드의 매개변수를 위해) 이 인스턴스를 반환하는(get)작업은 불가능하다.)
+    /*
+    //(예시를 들어 이해를 돕도록 하겠다.
+    //public static void inBox(Box<? super Toy> box,Toy n) {
+    //    box.set(n);
+    //    Toy myToy = box.get();
+    //}다음의 메소드가 있다고 가정하자.
+    //위와 같은 매개변수 선언에서 get메소드의 호출문은 컴파일 오류를 발생한다. 왜냐하면 반환형을 Toy로 결정할 수 없기 때문이다.
+    //즉 get메소드 호출 자체는 문제가 되지 않으나, 반환되는 값을 저장하기 위한 참조변수의 형을 Toy로 결정할 수 없다는 것이다.
+    //만약 Plastic이라는 클래스가 있고, 이를 Toy가 상속한다고 가정하자. 그리고 Box<Plastic> box가 매개변수로 전달될 수 있을 것이다.(Box<? super Toy> box이므로)
+    //이 때, get()이 반환하는 것이 Plastic인스턴스이므로 문제가 된다.)
+     */
+    //Comparator<T>도 Comparable<T>와 마찬가지로 정렬 기준에 관한 인터페이스이다.
+    //Comparator<T>를 사용하기 적절한 경우를 예시로 들어 차이점을 보이겠다.
+    //만약 일시적인 정렬 기준 변경있을 때  Comparable<T>의 compareTo()메소드를 매번 수정하는 일은 적절치 않다.
+    //따라서 Comparator<T>인터페이스를 구현한 클래스의 인스턴스를 통해 일시적인 정렬기준을 전달할 수 있다.
+    @Override
+    //Comparable<T>의 타입매개변수 T가 PeriodicElement로 결정되었으므로 compareTo(T o)의 매개변수도 PeriodicElement이다.
+    public int compareTo(PeriodicElement other){
+        //인자로 전달된 other가 작다면 양의정수, 크다면 음의정수, 같다면 0을 반환하도록한다.
+        //그러면 이를 기반으로 저장된 인스턴스들이 정렬된 상태를 유지하게 된다.
+        //다음과 같이 하여 인자로 전달된 인스턴스의 number가 크면 음수를, 작으면 정수를, 같으면 0을 반환하도록하였다.
+        return this.getNumber()-other.getNumber();
+    }
+    public Element getElement(){
+        //Element에 정의되어 있는 valueOf의 인자로 현재PeriodicElement클래스(this)의 getNumber()메소드를 호출하고 반환하는 값을 전달한다.
+        //즉, PeriodicElement의 인스턴스변수 number와 동일한 상수값(value)을 가지는 Element를 찾아서 반환한다.
+        return Element.valueOf(this.getNumber());
+    }
+    //어노테이션, Object의 equals()메소드를 오버라이딩한다.
+    @Override
+    //객체의 참조값을 통한 비교가 아닌 내용비교를 위해 Object클래스에 정의되어 있는 equals()메소드를 오버라이딩하였다.
+    //만약 이를 오버라이딩하지 않으면 Object의 equals()메소드를 기반으로 비교를 할 것이고 Object의 equals()는 다음과 같이
+    //public boolean equals(Object obj) {return(this==obj);} 참조값을 비교하도록 되어 있다.
+    //다음은 이 메소드를 오버라이딩하여 인스턴스변수 5개가 모두 동일할 때 동일한 내용의 인스턴스로 판단하도록 하였다.
+    //이 PeriodicElement를 상속받는 모든 구상클래스는 이를 상속받는데 만약 하위클래스에서 이를 다시 오버라이딩하지 않으면
+    //하위의 구상클래스를 대상으로 equals()메소드를 호출하여도 다음에 정의된 equals()이 호출된다.
+    public boolean equals(Object o){
+        //Object형 매개변수 o를 PeriodicElement형으로 다운캐스팅(형변환)한다.
+        //이렇게 명시적으로 타입변환을 하는 것은 프로그래머가 이를 보장한다는 의미로 컴파일러가 이를 허용하느데 만약 예를 들어Object o가 참조하는 인스턴스가
+        //PeriodicElement가 아닌 Object인 경우 다음은 실행예외를 일으킨다.(ClassCastException)
+        //따라서 instanceof를 통해 검사(확인)을 해주는 것이 좋을 것 같아서 다음과 같이 하였다.
+        //이를 통해 적절하지 않은 객체가 매개변수를 통해 전달되어 ClassCastException을 일으켜 프로그램이 종료되지 않고
+        //false를 반환하게 된다.(어차피 적절하지 않은 객체, 즉 PeriodicElement가 아닌 객체가 전달되면 둘은 비교 불가능하고 false가 되는 것이 논리에 맞다.)
+        //물론 PeriodicElement를 상속하는 구상클래스(concrete class)들도 모두 PeriodicElement를 상속하고 PeriodicElement형으로 형변환이 가능하므로 문제없다.
+        PeriodicElement pe=null;
+        if(o instanceof PeriodicElement){
+            pe=(PeriodicElement)o;
+        }else{
+            return false;
+        }
+        //위의 if문을 통과하여 형변환이 제대로 되었다면 둘은 서로 비교가 가능하다는 것이고(둘 다 PeriodicElement형 객체(PeriodicElement형 객체라는 말은 여기서 PeriodicElement는 추상클래스이므로
+        //이를 구현하는 구상클래스(concrete class)라는 의미이다.))
+        //다음의 if문을 통해 내용이 동일한지를 판단하여 true혹은 false를 반환한다.
+        if(this.getNumber()==pe.getNumber()&&
+                this.getName().toUpperCase().equals(pe.getName().toUpperCase())
+                &&this.getSymbol().equals(pe.getSymbol())
+                &&this.getWeight()==pe.getWeight()
+                &&this.getState().name().toUpperCase().equals(pe.getState().name().toUpperCase())){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
