@@ -1,63 +1,60 @@
+/*
+Lab5
+2020/05/01
+32180472 김동규
+ */
 
-//PeriodicElement클래스에서 사용할 다양한 클래스들을 import시켰다.
-//java.util패키지로 묶여있는 Arrays,List,ArrayList,StringTokenizer클래스들
-import java.util.Arrays;
-import java.util.List;
-import java.util.ArrayList;
+//PeriodicElement클래스에서 사용할 (java.util패키지에 들어있는)StringTokenizer클래스를 import시켰다.
 import java.util.StringTokenizer;
 
 
 //public으로 선언되었으므로 외부패키지에서도 접근이 가능하다.(모든 영역에서 접근이 가능하다)
 //public으로 선언된 클래스의 이름은 소스파일(.java)의 이름과 동일해야한다.
-public class PeriodicElement {
+public abstract class PeriodicElement {
     /*
-    PerdiodicElement의 인스턴스 변수들이다.
-    모두 private로 선언되었으므로 클래스 내부에서만 접근이 가능하며
+    객체 지향 특성을 살리기 위해서는 캡슐화 원칙을 지키는 것이 좋고 이를 위해 가능하면 필드에 대해서 접근 범위를 작게하는 것이 좋다.
+    PeriodicElement는 추상클래스이므로 이를 상속하는 구상클래스에서 이 필드에 접근 가능해야하므로 protected로 선언해주었다.
     이 필드(인스턴스 변수)들에 대한 접근을 위해 접근자와 설정자를 아래에 각각 정의해두었다.
      */
-    /*
-    객체 지향 특성을 살리기 위해서는 캡슐화 원칙을 지키는 것이 좋고 이를 위해 가능하면 필드에 대해서
-    private선언을 하고 접근자와 설정자를 통해 접근할 수 있도록 하는 것이 좋다.
-     */
-    private int number;
-    private String symbol;
-    private String name;
-    private double weight;
-    //State열거형을 참조하는 참조변수이자 인스턴스 변수(멤버 변수)를 state라는 이름으로 추가
-    private State state;
+    protected int number;
+    protected String symbol;
+    protected String name;
+    protected double weight;
+    protected State state;
+
     /*
     PeriodicElement의 생성자를 정의하였다.
-    이 때, PeriodicElement를 생성하는 과정에서 필드들(인스턴스변수들)에 대한 값을 정의하지 않을 수도 있기 때문에
-    매개변수가없는 생성자를 오버로딩해두었다.
-    또 매개변수가 없는 생성자에서는 this를 통해 다른 생성자를 호출하는데 0혹은""과 같은 null로 취급할 수 있는
-    (실제로 null은 아니지만)(아무것도 정의되어있지 않다는것을 알 수 있으므로)
-    값들을 전달한다.
+    물론 추상클래스로 정의되어 있는 PeriodicElement를 대상으로 인스턴스를 생성할 수는 없지만 하위클래스에서 super를 통해 호출이 가능하다.
      */
 
-    //매개변수를 전달 받지 않는 생성자 정의, 이 생성자에서는 0,"",State.UNKOWN과 같은 정해지지 않았다는 의미의 값들을(null에 해당하는..)
+    //매개변수를 전달 받지 않는 생성자 정의, 이 생성자에서는 0,"",State.UNKNOWN과 같은 정해지지 않았다는 의미의 값들을(null에 해당하는..실제로 null은 아니지만..)
     //오버로딩을 통해 작성된 또 다른 생성자를 this()를 통해 호출하고 이 값들을 인자로 전달한다.
-    public PeriodicElement(){
-        this(0,"","",0,State.UNKOWN);
+    //PeriodicElement를 추상클래스로 정의하고 인스턴스 생성시 PeriodicElementFactory를 이용함으로써 이를 활용할 경우는 없다고 판단되지만 그래도 이후 업데이트에서 필요하게 될지도 모르기 때문에 우선은 그냥 두겠다.
+    protected PeriodicElement(){
+        this(0,"","",0, State.UNKNOWN);
     }
 
     //this를 통해 객체 자신의 대한 참조 즉, 예를들어 매개변수 number가 아닌 인스턴스변수 number라는 것을 명시해준다.
-    //생성자(메소드)안에서 동일이름의 매개변수는 인스턴스변수의 가시성을 가린다고 볼 수 있다.
-    //즉, 동일한 변수명의 인스턴스변수 혹은 static변수 (필드)보다 지역변수(매개변수 혹은 메소드내에서 선언된 변수의 가기성이 더 높다.)
+    //생성자(메소드)안에서 동일이름의 매개변수(지역변수)는 인스턴스변수의 가시성을 가린다고 볼 수 있다.
+    //즉, 생성자 내부에서 동일한 변수명의 인스턴스변수 혹은 static변수 (필드)보다 지역변수(매개변수 혹은 메소드내에서 선언된 변수)의 가기성이 더 높다.
 
-    //멤버 변수(인스턴스 변수)를 추가함에 따라 생성자 수정(state를 매개변수로 받고 이를 통해 인스턴스변수(this.state)를 초기화하도록 변경)
-    public PeriodicElement(int number,String symbol,String name,double weight,State state){
+
+    //생성자에 대해서 public이 아닌 protected로 정의한 이유는 추상클래스에 대한 인스턴스 생성이 불가하므로 외부에서 생성자를 호출할 일이 없고 적절치도 않다.
+    //또한 PeriodicElement추상클래스에 대한 생성자의 호출은 이를 구현하는 구상클래스(Concrete Class)에서 이루어지므로 protected로 접근지정자를 선언해주었다.
+    protected PeriodicElement(int number,String symbol,String name,double weight,State state){
         this.number=number;
         this.symbol=symbol;
         this.name=name;
         this.weight=weight;
         this.state=state;
     }
-
-
-    //인스턴스 변수 state에 대한 접근자와 설정자(Setter and Getter)메소드 정의
-    public State getState() {return state; }
-    public void setState(State state) {this.state = state;}
-    //이후 8개의 메소드들은 인스턴스변수(필드)에 대한 접근자와 설정자들이다.
+    //이후 10개의 메소드들은 인스턴스변수(필드)에 대한 접근자와 설정자들이다.
+    public State getState(){
+        return state;
+    }
+    public void setState(State state){
+        this.state=state;
+    }
     public int getNumber() {
         return number;
     }
@@ -91,12 +88,15 @@ public class PeriodicElement {
     public String toString(){return getClass().getName()+"@"+Integer.toHexString(hashCode());}
     가 호출되게 된다.
      */
+    /*
+    추가적으로 만약 이를 구현하는 구상클래스(concrete class)에서 각 클래스에 맞게끔 toString()다시 재정의할 수 있는데
+    만약 그렇게 하지 않은경우 추상클래스PeriodicElement에서 Object의 toStirng()을 오버라이딩한 다음의 toString()이 호출된다.
+    예를 들어 GasPeriodicElement에서 toString()을 오버라이딩하지 않았다면 현재추상클래스 PeriodicElement에 정의된 toString()이 호출된다.
+     */
 
     //어노테이션은 자바 컴파일러에게 메시지를 전달하는 목적의 메모로 볼 수 있는데(메타데이터)
     //@Override를 통하여 오버라이딩이 제대로 이루어졌는지 컴파일과정에서 발견가능하다.(개발자의 실수를 잡아냄)
     //스프링 프레임워크등에서 특수 기능을 위해 사용하므로 어노테이션에 익숙해지는 것이 좋다고 생각한다.
-
-    //인스턴스 변수를 추가해줌에 따라 toString()또한 수정해주었다.
     @Override
     public String toString() {
         return "PeriodicElement{" +
@@ -104,73 +104,26 @@ public class PeriodicElement {
                 ", symbol='" + symbol + '\'' +
                 ", name='" + name + '\'' +
                 ", weight=" + weight +
-                ", state=" + state +
                 '}';
     }
 
-    //toString()메소드에서는 문자열 한 줄을 반환하기 때문에
-    //PeriodicElement의 정보를 한줄씩(인스턴스 변수 하나당 한줄씩) 출력하는 인스턴스 메소드로 정의
-    //인스턴스 변수 정보를 출력하는 것이기 때문에 인스턴스에 종속적인 메소드로 정의하는 것이 옳다고 생각되어 Non-Static으로 정의하였습니다.
-    //인스턴스를 통해 메소드 접근이 가능하다.
-    public void print(){
-        System.out.println("<Periodic Elemenet Information>");
-        System.out.println("number=" +this.number);
-        System.out.println("symbol="+this.symbol);
-        System.out.println("name="+this.name);
-        System.out.println("weight="+this.weight);
-        System.out.println("state="+this.state);
-    }
+    //인스턴스 정보를 출력하기 위한 메소드로 구체적인 구현은 하위클래스에서 오버라이딩을 통해 구현하도록 하였습니다.
+    //인스턴스에 대한 정보(속성,필드)에 대해 출력하기 때문에 인스턴스에 종속적인 메소드로 정의하는 것이 옳고 따라서 Non-Static으로 정의
+    //추상클래스(추상타입)을 상속하여 구체화하는 객체에서 이를 구현하도록 하였습니다. 이를 통해 다형성을 실현하도록 하였습니다.
+    //(객체들의 타입이 다르면 똑같은 메시지가 전달되더라도 각 객체의 타입에 따라서 다르게 동작)
+    //물론 PeriodicElement를 상속하더라도 이를 구현하지 않을 수 있지만 그러한 경우 상속한 클래스도 마찬가지로 추상클래스로 정의해주어야 합니다.
+    public abstract void print();
 
-    //Lab4에서는 PeriodicElement의 필드를 통해 State를 저장하므로 즉 PeriodicElement가 State속성을 포함하기 때문에 다음 메소드를 주석처리하였다.
     /*
-
-        //public static으로 정의되어 다른 패키지의 클래스에서도 접근이 가능하며 static으로 정의되었으므로 클래스 로딩시점에 정적으로 바인딩된다.
-        //따라서 인스턴스에 종속되지 않으며 외부에 메소드의 기능을 제공할 목적으로 정의했다고 볼 수 있다.
-        //매개변수로 받은 element에 해당하는 상태(State열거형 상수)를 반환해주는 기능을 하는 메소드이다.
-
-    public static State getState(PeriodicElement element){
-        //gas와solid의 번호가 불규칙하고 많으므로 컬렉션인스턴스를 생성하여 getState메소드에서 활용하겠다.
-        //Arrays.asList를 통하여 ArrayList객체를 선언과 동시에 초기화하여 생성하였고 이를 List<Integer>형 참조변수로 참조하였다.
-        //List<Integer>이기 때문에 Integer형 인스턴스만 저장할 수 있다.(제네릭 개념)
-        //여기서 Integer인스턴스를 저장해야함에도 불구하고 1,2와 같은 리터럴을 사용할 수 잇는 이유는
-        //내부적으로 '오토박싱'과 '오토언박싱'작업이 이루어지기 때문이다.
-        //즉 자동으로 박싱과 언박싱 작업(Wrapper->Primitive,Primitive->Wrapper)을 수행한다.
-        List<Integer> gasNumber= Arrays.asList(1,2,7,8,9,10,17,18,36,54,86);
-        List<Integer> liquidNumber=Arrays.asList(35,80);
-        gasNumber=new ArrayList<>(gasNumber);
-        liquidNumber=new ArrayList<>(liquidNumber);
-
-
-        //주기율표의 번호는 1부터 118까지 이므로 이 원소번호를 벗어나는 경우 잘못되었음을 알리고
-        //UNKOWN을 반환해주자(존재하지않는 주기율표원소의 상태는 모르는 것이나 다름없기 때문에 이렇게 처리하였다.)
-        //PeriodicElement의 getNumber()를 통해 element인스턴스 변수를 반환하여 값을 비교한다.
-        if(element.getNumber()<=0||element.getNumber()>118){
-            System.out.println("잘못된 원소번호입니다.");
-            System.out.println("상태를 알 수 없습니다.");
-            return State.UNKOWN;
-        }
-        //element.getNumber()를 통해 반환되는 인스턴스 변수 number가 gasNumber컬렉션 인스턴스(ArrayList)가 저장하고 있는 인스턴스들(Integer) 중에 일치하는 값이 존재하면 State.GAS반환
-        //오토 박싱,오토 언박싱 수행
-        else if(gasNumber.contains(element.getNumber())){
-            return State.GAS;
-        }
-        //마찬가지로 element.getNumber()를 통해 반환되는 인스턴스 변수 number가 liquidNumber컬렉션 인스턴스가 저장하고 있는 인스턴스들 중 일치하는 값이 존재하면 State.LIQUID반환
-        else if(liquidNumber.contains(element.getNumber())){
-            return State.LIQUID;
-        }
-        //주기율표의 원소번호(element.getNumber()를 통해 반환되는 인스턴스 변수 number)의 값이 104~118사이이면 UNKOWN을 반환한다.
-        else if(104<=element.getNumber()&&element.getNumber()<=118){
-            return State.UNKOWN;
-        }
-        //이외에는 모두 SOLID를 반환한다.
-        else{
-            return State.SOLID;
-        }
-    }
-
-
+    오버로딩된 두개의 parsePeriodicElement()메소드는 이를 구현하는 구상클래스(Concrete Class)들에게 공통적인 내용의 메소드들이다.
+    따라서 이들에 대해 굳이 추상메소드로두어 각각의 Concrete Class들에서 이를 구현하도록 할 필요가 없기 때문에 자체로 완전한(몸체를 가지는) 메소드로 구현하였다.
+    추상클래스인 PeriodicElement를 상속을 통해 구현하는 클래스의 인스턴스들에서는 아래의 메소드에 접근할 수 있다.
      */
+
     //String[]형태를 매개변수로 받기위한 메소드로 PeriodicElement parsePeriodicElement(String line)메소드와 오버로딩 관계이다.
+    //반환형을 PeriodicElement로 둠으로써 이를 구현하는 하위클래스의 인스턴스들에 대해서 모두 반환이 가능하다.
+    //즉 구현 교체의 유연함을 얻을 수 있고(이 메소드 하나로 4개 상태의 인스턴스에 대해 적용 가능)불필요하게 4개의 구상클래스에 대해 별도의 메소드를 정의할 필요도 없다.
+    //또한 이후에 PeriodicElement를 구현하는 클래스가 추가되더라도 이 메소드를 적용할 수 있다.
     public static PeriodicElement parsePeriodicElement(String[] strArray){
         PeriodicElement element=null;
         //원소의 정보(number,name,symbol,weight,state)총 5개 이므로
@@ -193,20 +146,42 @@ public class PeriodicElement {
                 //따라서 메소드 중간에서 return문이 실행되면 값이 반환되면서(혹은 값의반환없이) 메소드의 실행은 종료된다.
                 return null;
             }
-            //PeriodicElement클래스의 생성자 변경에 따라 parsePeriodicElement내부에서의 PeriodicElement생성시에도 인자전달에 변경이 발생(인스턴스변수 state에 해당하는 내용 추가로 전달)
-            //이 때 열거형 State에 정의되어 있는 valueOf메소드 strArray[4].toUpperCase()이 반환하는 String을 전달한다.(문자열을의 모든 문자를 대문자로 바꾼다.)
-            //nameOf를 사용하여도 되지만 nameOf의 경우 "GAS"와 같은 입력 혹은 "1"와 같은 State열거형의 인스턴스 변수value값을 통한 입력 둘 다 캐치 가능하기 때문에 메소드의 의도와는 맞지 않기 때문에
+            //PeriodicElementFactory클래스에 static으로 정의되어 있는 getInstance()메소드를 호출하여 State에 따른 객체를 반환하고 이를 element변수를 통해 참조한다.
+            //(상위클래스의 참조변수로 하위클래스의 인스턴스를 참조할 수 있다. 또 이를 통해 element는 GasPeriodicElement,LiquidPeriodicElement등 모두 참조할 수 있다.)
+            element=PeriodicElementFactory.getInstance(number,strArray[1],strArray[2],Double.parseDouble(strArray[3]),State.valueOf(strArray[4].toUpperCase()));
+            //열거형 State에 정의되어 있는 valueOf메소드의 인자로 strArray[4].toUpperCase()이 반환하는 String을 전달한다.(문자열을의 모든 문자를 대문자로 바꾼다.)
+            //nameOf를 사용하여도 되지만 nameOf의 경우 "GAS"와 같은 입력 혹은 "1"와 같은 State열거형의 인스턴스 변수 value값을 통한 입력 둘 다 캐치 가능하기 때문에 메소드의 의도와는 맞지 않기 때문에
             //nameOf사용을 지양하고 valueOf(String)사용을 지향한다.
-            element = new PeriodicElement(number, strArray[1], strArray[2], Double.parseDouble(strArray[3]), State.valueOf(strArray[4].toUpperCase()));
+            //Enum의 valueOf메소드는 다음과 같이 정의되어 있다. 제네릭과 같은 문법적인 내용을 제외하고
+            //메소드의 기능을 위주로 간단히 요약하면 인자로 받은 name과 일치하는 열거형상수이름이 없을 경우 IllegalArgumentException 예외 인스턴스를 생성하여 호출한 영역으로 넘긴다.
+            /*
+            public static <T extends Enum<T>> T valueOf(Class<T> enumType,
+                                                String name) {
+            T result = enumType.enumConstantDirectory().get(name);
+            if (result != null)
+                return result;
+            if (name == null)
+                throw new NullPointerException("Name is null");
+            throw new IllegalArgumentException(
+                "No enum constant " + enumType.getCanonicalName() + "." + name);
+            }
+             */
         }catch(Exception e){
             //try문에서 예외가 발생시 catch문으로 실행흐름이 이어지고 컴파일러는 예외가 처리된것으로 간주하고 프로그램의 실행흐름을 이어나간다.
             //이에 대한 내용을 사용자에게 알리고 null을 반환
             System.out.println("잘못된 입력이 존재합니다. 입력양식을 지켜주세요.");
             return null;
         }
+
+        //실행흐름이 catch문으로 흘러가게 되었을 경우에는 처음의 element=null이므로 null이 반환되고 정상적인 입력일 경우에만
+        //PeriodicElementFactory.getInstance()를 통해 생성된 인스턴스가 반환된다.
         return element;
     }
-    //문자열을 한줄로 입력받아 이를 공백으로 분리해 PeriodicElement인스턴스를 생성해 반환하는 기능을 하는 메소드이다.
+
+
+    //문자열을 한줄로 입력받아 이를 StringTokenizer를 이용하여 공백으로 분리하고, 이에 대항하는 PeriodicElement를 구현한 인스턴스를 생성하고 반환한다.
+    //반환형을 PeriodicElement로 둠으로써 이를 구현하는 하위클래스의 인스턴스들에 대해서 모두 반환이 가능핟.
+    //즉 GasPeriodicElement도 반환가능하고, SolidPeriodicElement도 반환 가능하다.
     public static PeriodicElement parsePeriodicElement(String line){
         PeriodicElement element=null;
         //특정 기준을 가지고 문자열을 나눌 때 사용하기 편리한 StringTokenizer클래스를 이용하여 문자열(String)을 분리하려고한다.
@@ -230,8 +205,11 @@ public class PeriodicElement {
                 //따라서 메소드 중간에서 return문이 실행되면 값이 반환되면서(혹은 값의반환없이) 메소드의 실행은 종료된다.
                 return null;
             }
-            //PeriodicElement클래스의 생성자 변경에 따라 parsePeriodicElement내부에서의 PeriodicElement생성시에도 인자전달에 변경이 발생(인스턴스변수 state에 해당하는 내용 추가로 전달)
-            //이 때 열거형 State에 정의되어 있는 valueOf메소드에 st.nextToken()이 반환하는 String을 toUpperCase()를 통해 문자열의 모든 문자를 대문자로 바꾼다.
+
+            //PeriodicElementFactory클래스에 static으로 정의되어 있는 getInstance()메소드를 호출하여 State에 따른 객체를 반환하고 이를 element변수를 통해 참조한다.
+            //(상위클래스의 참조변수로 하위클래스의 인스턴스를 참조할 수 있다. 또 이를 통해 element는 GasPeriodicElement,LiquidPeriodicElement등 모두 참조할 수 있다.)
+            element= PeriodicElementFactory.getInstance(number,st.nextToken(),st.nextToken(),Double.parseDouble(st.nextToken()),State.valueOf(st.nextToken().toUpperCase()));
+            //열거형 State에 정의되어 있는 valueOf메소드에 st.nextToken()이 반환하는 String을 toUpperCase()를 통해 문자열의 모든 문자를 대문자로 바꾼 후 전달한다.
             //nameOf를 사용하여도 되지만 nameOf의 경우 "GAS"와 같은 입력 혹은 "1"와 같은 State열거형의 인스턴스 변수value값을 통한 입력 둘 다 캐치 가능하기 때문에 메소드의 의도와는 맞지 않기 때문에
             //nameOf사용을 지양하고 valueOf(String)사용을 지향한다.
             //Enum의 valueOf메소드는 다음과 같이 정의되어 있다. 제네릭과 같은 문법적인 내용을 제외하고
@@ -248,7 +226,8 @@ public class PeriodicElement {
                 "No enum constant " + enumType.getCanonicalName() + "." + name);
             }
              */
-            element = new PeriodicElement(number, st.nextToken(), st.nextToken(), Double.parseDouble(st.nextToken()),State.valueOf(st.nextToken().toUpperCase()));
+
+
             //만약 StringTokenizer의 hasMoreToekns()의 반환값이 참이면 반환할 토큰이 남아있다는 것을 의미하고
             //이는 곧 요구된 양식대로의 입력이 아닌 추가적인 입력이 존재한다는 뜻으로 잘못된입력이므로
             //throw new Exception()을 통해 예외 인스턴스를 생성하고 이를 catch구문에 전달하게끔 하였다.
@@ -262,8 +241,8 @@ public class PeriodicElement {
             return null;
         }
 
-        //실행흐름이 catch문으로 흘러가게 되었을 경우에는 처음의 element=null이므로 null이 반환되고 정상적인 입력일 경우에만 new PeriodicElement를 통해
-        //PeriodicElement인스턴스가 반환된다.
+        //실행흐름이 catch문으로 흘러가게 되었을 경우에는 처음의 element=null이므로 null이 반환되고
+        //정상적인 입력일 경우에만 PeriodicElementFactory.getInstance()를 통해 생성된 인스턴스가 반환된다.
         return element;
     }
 }

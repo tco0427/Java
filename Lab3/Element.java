@@ -1,3 +1,9 @@
+/*
+Lab5
+2020/05/01
+32180472 김동규
+ */
+
 //Element라는 이름의 열거형을 public(접근지정자)하게 선언하였다.
 //따라서 외부에서도(동일패키지가아닌)접근이 가능해진다.
 /*
@@ -18,7 +24,7 @@ public enum Element {
     OXYGEN(8),
     FLUORINE(9),
     NEON(10),
-    NATRIUM(11),
+    SODIUM(11),
     MAGNESIUM(12),
     ALUMINIUM(13),
     SILICON(14),
@@ -26,17 +32,17 @@ public enum Element {
     SULFUR(16),
     CHLORINE(17),
     ARGON(18),
-    KALIUM(19),
+    POTASSIUM(19),
     CALCIUM(20),
     SCANDIUM(21),
     TITANIUM(22),
     VANADIUM(23),
     CHROMIUM(24),
     MANGANESE(25),
-    IRON(26),
+    FERRUM(26),
     COBALT(27),
     NICKEL(28),
-    COPPER(29),
+    CUPRUM(29),
     ZINC(30),
     GALLIUM(31),
     GERMANIUM(32),
@@ -110,8 +116,7 @@ public enum Element {
     }
 
     //Element열거형에 static으로 정의된 nameOf메소드이다.
-    //사용자가 value값과 같은 1,2,3,4,5를 입력할 수도 있고, 직접이름을입력받을 수 있도록 하고 이에 해당하는 열거형 인스턴스(열거형 상수 하나하나를 Element객체로 볼 수 있으므로)
-    //가 존재하면 이를 반환하고 아니면 null을 반환하도록 한다.
+    //사용자가 value값과 같은 1,2,3,4,5를 입력할 수도 있고, 직접 이름을 입력받을 수 있도록 하고 이에 해당하는 열거형 인스턴스(열거형 상수 하나하나를 Element객체로 볼 수 있으므로)가 존재하면 이를 반환하고 아니면 null을 반환하도록 한다.
     public static Element nameOf(String name){
         for(Element element:Element.values()){
             try {

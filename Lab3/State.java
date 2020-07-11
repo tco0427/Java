@@ -1,3 +1,9 @@
+/*
+Lab5
+2020/05/01
+32180472 김동규
+ */
+
 public enum State {
     //열거형 값 하나하나가 모두 State객체라고 볼 수 있다.
     //따라서 이는 static final State GAS=new State(1); 과 같은것이다.
@@ -5,7 +11,7 @@ public enum State {
     GAS(1),
     SOLID(2),
     LIQUID(3),
-    UNKOWN(4);
+    UNKNOWN(4);
 
     /*
         //보통 enum Excample(a,b,c)와 같이 생성자를 통해 열거형 상수의 값을 지정하지 않고 선언하기도 한다.
