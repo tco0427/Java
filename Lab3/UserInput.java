@@ -1,5 +1,3 @@
-//32180472 김동규
-
 //import문을 통하여 java.util패키지의 Scanner클래스를 import(포함)한다.
 import java.util.Scanner;
 
@@ -14,8 +12,12 @@ public class UserInput{
     //이 클래스의 메소드는 모두 public과 static으로 선언되었다.
     //public으로 선언되었으므로 이 클래스 이외의 영역에서 모두 접근이 가능하며
     //static으로 선언되었으므로 인스턴스 생성과 무관하게 접근이 가능하다.
+    //또한 생성자에 대해서 private 접근 지정자를 통해 UserInput클래스 외부에서의 생성자호출을 제한하고 있다.
+    //즉 UserInput클래스에 대해 인스턴스 생성이 불가능하다.
+    private UserInput(){}
 
-
+    //이와 같이 생성자를 private로 선언하고 이 클래스의 모든 메소드를 public static으로 정의하는 이유는
+    //이 클래스는 인스턴스의 생성이 목적이 아니고 외부에 기능을 제공하기 위함이기 때문이다.
 
     public static double getDouble(){
         //try-catch구문을 통하여
@@ -83,15 +85,44 @@ public class UserInput{
         //contentEquals를 호출한 문자열의 내용과 인자로 전달된 문자열의 내용이 100% 일치하면 true를 반환한다.
         //if문이 참이면 다음 문장 실행
         if(s.contentEquals("q")){
+            //boolean형 상수값인 true반환
             return true;
         }
         //거짓이 다음 문장 실행
         else{
+            //boolean형 상수값인 false반환
             return false;
         }
     }
+    public static char getKey(){
+        System.out.print("Press key 'q' to exit, 'n' to nextElement, 'p'  to previousElement,'c' to currentElement, ' ' to continue: ");
+        //사용자로부터 한줄의 문자열을 입력받고 이를 s를 통해 참조한다.
+        String s=scan.nextLine();
+        //contentEquals를 호출한 문자열의 내용과 인자로 전달된 문자열의 내용이 100% 일치하면 true를 반환한다.
+        //q,n,p,c,' '에 해당하는 값을 다중if-else문으로 구분하고 char형으로 반환한다.
+        if(s.contentEquals("q")){
+            return 'q';
+        }else if(s.contentEquals("n")){
+            return 'n';
+        }else if(s.contentEquals("p")){
+            return 'p';
+        //원소번호의 이전,이후가 아닌 입력한 원소번호 그대로에 대한 정보를 알고 싶을 수 있기에 추가
+        }else if(s.contentEquals("c")){
+            return 'c';
+        }else{
+            return ' ';
+        }
+    }
 
+    //UserInput.getString()을 통해 입력받은 값을 String클래스에 정의되어 있는 toUpperCase()를 호출하여 모두 대문자로 만들어 준다.
+    //왜냐하면 관례적으로 상수는 모두 대문자로 정의하고 우리도 열거형(Enum)들에서 상수들을 모두 대문자로 선언했기 때문이다.
+    //그리고 이 값을 Element.nameOf의 인자로 전달해준다. 그후 Element.nameOf로 반환되는 값을(Element형)을 반환해준다.
     public static Element getElement(){
         return Element.nameOf(UserInput.getString().toUpperCase());
     }
+
+
+    //내가 추가한 코드(State를 직접 입력받고 이를 통해 PeriodicTable의 find을 호출하는 것이 좋다고 생각되어 추가하였다.)
+    //getELement와 내용은 동일하다 단지 nameOf(static으로 정의된 메소드)를 호춣하는 열거형이 Element에서 State로 차이가 있을 뿐이다.
+    public static State getState(){return State.nameOf(UserInput.getString().toUpperCase());}
 }
